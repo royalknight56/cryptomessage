@@ -1,0 +1,42 @@
+import { ArmorTypeEnum, ItemPrototype } from "@idleworld/types";
+
+export const BagItemPrototypeMap: Record<string, ItemPrototype> = {
+  "1": {
+    id: "1",
+    name: "test",
+    description: "test",
+    maxCount: 99,
+    type: "material",
+    icon: "test",
+    quality: 1,
+    level: 1,
+    rarity: 1,
+    properties: {},
+  },
+  "2": {
+    id: "2",
+    name: "武器1",
+    description: "武器",
+    maxCount: 1,
+    type: "armor",
+    armorPosition: ArmorTypeEnum.WEAPON,
+    icon: "test2",
+    quality: 1,
+    level: 1,
+    rarity: 1,
+    properties: {},
+  },
+  "3": {
+    id: "3",
+    name: "头盔1",
+    description: "头盔",
+    maxCount: 1,
+    type: "armor",
+    armorPosition: ArmorTypeEnum.HELMET,
+    icon: "test3",
+    quality: 1,
+    level: 1,
+    rarity: 1,
+    properties: {},
+  },
+};

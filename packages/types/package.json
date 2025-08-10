@@ -1,0 +1,17 @@
+{
+  "name": "@idleworld/types",
+  "version": "1.0.0",
+  "description": "Shared types for IdleWorld game",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3"
+  },
+  "files": [
+    "dist/**/*"
+  ]
+} 
