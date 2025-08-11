@@ -72,6 +72,19 @@ class AuthService {
     }
   }
 
+  async unregister(userId: string) {
+    try {
+      // await redisManager.deleteAllUser();
+      await redisManager.deleteUser(userId);
+      return {
+        success: true,
+        message: "注销成功",
+      };
+    } catch (error) {
+      console.error("注销错误:", error);
+    }
+  }
+
   // 用户登录
   async login(loginData: LoginRequest): Promise<AuthResponse> {
     try {

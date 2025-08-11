@@ -47,6 +47,16 @@ class RedisManager {
     );
   }
 
+  async deleteAllUser(): Promise<void> {
+    await this.client.flushAll();
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    await this.client.del(`user:${userId}`);
+    await this.client.del(`email:${userId.toLowerCase()}`);
+    await this.client.del(`username:${userId.toLowerCase()}`);
+  }
+
   async getUser(userId: string): Promise<UserEntity | null> {
     const user = await this.client.get(`user:${userId}`);
     return user ? JSON.parse(user) : null;

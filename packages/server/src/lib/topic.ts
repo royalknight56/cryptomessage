@@ -20,14 +20,12 @@ export class TopicSocket {
     this.socket = socket;
 
     socket.on("subscribe_topic", (topic: string) => {
-      //   console.log("subscribe_topic", topic);
       socket.emit("subscribe_topic", {
         topic: topic,
         success: true,
       });
 
       this.subscribe(topic, (payload) => {
-        // console.log("topic", payload);
         socket.emit(topic, {
           topic: topic,
           payload: payload,
@@ -54,9 +52,8 @@ export class TopicSocket {
 
   setUser(user: User | null) {
     this.user = user;
-    console.log("iser", user);
     TopicSocket.playerMap.set(this.user?.userId as string, this);
-    // this.userService.addOnlineUser(this.user?.userId as string);
+    this.userService.addOnlineUser(this.user?.userId as string);
   }
 
   listenAction(
@@ -108,7 +105,9 @@ export class TopicSocket {
   emitTo(topic: string, uids: string[], data: unknown) {
     for (const uid of uids) {
       const player = TopicSocket.playerMap.get(uid);
+
       if (player) {
+        // console.log("player", player.socket);
         player.socket?.emit(topic, {
           topic: topic,
           payload: data,

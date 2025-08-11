@@ -32,6 +32,16 @@ export class AuthController {
     }
   }
 
+  async unregister(req: Request, res: Response): Promise<void> {
+    try {
+      const result = await authService.unregister(req.body.userId);
+      const statusCode = result ? 200 : 400;
+      res.status(statusCode).json(result);
+    } catch (error) {
+      console.error("注销控制器错误:", error);
+    }
+  }
+
   // 用户登录
   async login(req: Request, res: Response): Promise<void> {
     try {

@@ -1,4 +1,5 @@
 import { SocketMap } from "../types/socket-map";
+import { TopicEnum } from "../types/topic-enum";
 
 export const UserSocketMap: SocketMap = {
   join_game: (topicSocket, action) => {
@@ -19,5 +20,10 @@ export const UserSocketMap: SocketMap = {
         message: "服务器错误",
       });
     }
+  },
+  action_get_online_user: async (topicSocket, action) => {
+    topicSocket.emit(TopicEnum.ONLINE_USER, {
+      onlineUsers: await topicSocket.userService.getOnlineUsers(),
+    });
   },
 };

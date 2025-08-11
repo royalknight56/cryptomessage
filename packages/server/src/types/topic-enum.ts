@@ -7,4 +7,6 @@ export enum TopicEnum {
   MESSAGE = "message",
   GROUP = "group",
   ONLINE_USER = "online_user",
+  ADD_USER = "add_user",
+  PUBLIC_KEY = "public_key",
 }

@@ -17,6 +17,15 @@ export class LoginApi {
       });
   }
 
+  public static async unregister() {
+    return await apiClient
+      .post<{
+        success: boolean;
+        message: string;
+      }>("/auth/unregister", {})
+      .then((res) => res.data);
+  }
+
   public static async register(formData: {
     email: string;
     username: string;

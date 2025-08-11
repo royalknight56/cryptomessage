@@ -4,6 +4,7 @@
             {{ player }}
         </div>
         <button @click="handleLogout">退出登录</button>
+        <button @click="handleUnregister">注销账号</button>
     </div>
 </template>
 
@@ -25,8 +26,6 @@ onMounted(() => {
         gameStore.subscribeTopic("bag", async (data: TopicPayload<{ bag: UserBag }>) => {
             gameStore.setBag(data.payload.bag);
         });
-        const res = await gameStore.wsAction<{ bag: UserBag }>("action_get_bag", {});
-        gameStore.setBag(res.bag);
     });
     gameStore.subscribeTopic("system_message", (data: TopicPayload<{ message: string; user: User }>) => {
         console.log("system_message", data);
@@ -36,6 +35,14 @@ const player = computed(() => gameStore.player);
 
 const handleLogout = () => {
     LoginApi.logout().then((res) => {
+        if (res.success) {
+            router.push('/login');
+        }
+    });
+}
+
+const handleUnregister = () => {
+    LoginApi.unregister().then((res) => {
         if (res.success) {
             router.push('/login');
         }

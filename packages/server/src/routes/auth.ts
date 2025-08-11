@@ -13,6 +13,10 @@ authRoutes.post("/login", (req, res) => authController.login(req, res));
 // 用户登出
 authRoutes.post("/logout", (req, res) => authController.logout(req, res));
 
+authRoutes.post("/unregister", (req, res) =>
+  authController.unregister(req, res),
+);
+
 // 获取当前用户信息（需要认证）
 authRoutes.get("/me", authenticateToken, (req, res) =>
   authController.getCurrentUser(req, res),

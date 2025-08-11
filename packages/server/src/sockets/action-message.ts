@@ -5,45 +5,55 @@ import { ActionPayload } from "@idleworld/types";
 export const MessageSocketMap: SocketMap = {
   action_message_send: (
     topicSocket,
-    action: ActionPayload<{ message: string }>,
+    action: ActionPayload<{ message: string; to: string }>,
   ) => {
     topicSocket.actionRes(action, {
       id: 1,
       message: action.payload.message,
     });
-    topicSocket.emitGlobal(TopicEnum.MESSAGE, {
+    topicSocket.emitTo(TopicEnum.MESSAGE, [action.payload.to], {
       id: 1,
+      from: topicSocket.user?.userId as string,
+      to: action.payload.to,
       message: action.payload.message,
     });
   },
 
   action_message_add_user: (
     topicSocket,
-    action: ActionPayload<{ uids: string[] }>,
+    action: ActionPayload<{ uid: string }>,
   ) => {
-    topicSocket.emitTo(TopicEnum.MESSAGE, action.payload.uids, {
+    topicSocket.emitTo(TopicEnum.ADD_USER, [action.payload.uid], {
       id: 1,
+      from: topicSocket.user?.userId as string,
+      to: action.payload.uid,
       message: "add user",
     });
   },
 
   action_message_send_public_key: (
     topicSocket,
-    action: ActionPayload<{ publicKey: string; uids: string[] }>,
+    action: ActionPayload<{ publicKey: string; uid: string }>,
   ) => {
-    topicSocket.emitTo(TopicEnum.MESSAGE, action.payload.uids, {
-      id: 1,
+    topicSocket.emitTo(TopicEnum.PUBLIC_KEY, [action.payload.uid], {
       publicKey: action.payload.publicKey,
-      message: "send public key",
+      from: topicSocket.user?.userId as string,
+      to: action.payload.uid,
     });
   },
 
   action_message_send_to_user: (
     topicSocket,
-    action: ActionPayload<{ message: string; uids: string[] }>,
+    action: ActionPayload<{ message: string; to: string }>,
   ) => {
-    topicSocket.emitTo(TopicEnum.MESSAGE, action.payload.uids, {
+    topicSocket.actionRes(action, {
       id: 1,
+      message: action.payload.message,
+    });
+    topicSocket.emitTo(TopicEnum.MESSAGE, [action.payload.to], {
+      id: 1,
+      from: topicSocket.user?.userId as string,
+      to: action.payload.to,
       message: action.payload.message,
     });
   },
