@@ -15,6 +15,7 @@ export function createApp() {
     cors({
       origin: ["https://cmes.vtron.site/", "http://localhost:5173"],
       credentials: true,
+      methods: ["GET", "POST", "OPTIONS", "PATCH"],
     }),
   );
   app.use(express.json());
