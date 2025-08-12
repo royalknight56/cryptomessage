@@ -147,7 +147,7 @@ import { useGameStore } from "@/stores";
 import { LoginApi } from "@/features/user/features/login/api/login-api";
 import { useRouter } from "vue-router";
 import { ref, computed, onMounted } from 'vue';
-import type { TopicPayload, User, UserBag } from '@idleworld/types';
+import type { TopicPayload, User } from '@idleworld/types';
 
 // 游戏状态
 const gameStore = useGameStore();
