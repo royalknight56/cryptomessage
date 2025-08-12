@@ -13,7 +13,7 @@ export function createApp() {
   // 中间件配置
   app.use(
     cors({
-      origin: process.env.CLIENT_URL || "http://localhost:5173",
+      origin: ["https://cmes.vtron.site/", "http://localhost:5173"],
       credentials: true,
     }),
   );
@@ -32,7 +32,7 @@ export function createSocketServer(app: express.Application) {
 
   const io = new Server(server, {
     cors: {
-      origin: process.env.CLIENT_URL || "http://localhost:5173",
+      origin: ["https://cmes.vtron.site/", "http://localhost:5173"],
       methods: ["GET", "POST", "OPTIONS", "PATCH"],
       credentials: true,
     },
