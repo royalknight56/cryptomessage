@@ -1,4 +1,4 @@
-import { createApp, createSocketServer } from "./config/server";
+import { createApp, createSocketServer } from "./app/app";
 import { ServerService } from "./app/server";
 
 async function main() {
