@@ -5,8 +5,8 @@ name: Home CI
 
 on:
   push:
-    paths:
-      - 'lib/**'
+    branches:
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
