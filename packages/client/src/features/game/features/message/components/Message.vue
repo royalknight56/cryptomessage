@@ -6,7 +6,7 @@
             <div class="friends-section">
                 <div class="section-header">好友列表</div>
                 <div class="friends-list">
-                    <div v-for="friend in sharedKeyMap.keys()" :key="friend"
+                    <div v-for="friend in filterFriends(Array.from(sharedKeyMap.keys()))" :key="friend"
                         :class="['friend-item', { 'active': friend === selectUser }]" @click="handleSelectUser(friend)">
                         <div class="user-avatar">{{ friend.charAt(0).toUpperCase() }}</div>
                         <div class="user-name">{{ friend }}</div>
@@ -18,7 +18,7 @@
             <div class="online-users-section">
                 <div class="section-header">在线用户</div>
                 <div class="online-users-list">
-                    <div v-for="user in onlineUsers" :key="user">
+                    <div v-for="user in filterOnlineUsers(onlineUsers)" :key="user">
                         <div v-if="user !== (player?.userId || '')" class="online-user-item"
                             @click="handleAddUser(user)">
                             <div class="user-avatar">{{ user.charAt(0).toUpperCase() }}</div>
@@ -69,7 +69,7 @@
                     <div v-for="message in filterMessages(messages, selectUser)" :key="message.id"
                         class="message-bubble" :class="{ 'self-message': message.from === player?.userId }">
                         <div class="message-content">{{ message.message }}</div>
-                        <div class="message-time">{{ new Date().toLocaleTimeString() }}</div>
+                        <!-- <div class="message-time">{{ new Date().toLocaleTimeString() }}</div> -->
                     </div>
                 </div>
             </div>
@@ -134,6 +134,10 @@ const filterFriends = (friends: string[]) => {
     return friends.filter(friend => onlineUsers.value.includes(friend));
 }
 
+const filterOnlineUsers = (onlineUsers: string[]) => {
+    return onlineUsers.filter(user => user !== (player?.value?.userId || '') && !sharedKeyMap.value.has(user));
+}
+
 const startAddUser = async (uid: string) => {
     friendRequests.value.push({ id: uid, type: "self", publicKey: "" });
     // 导出公钥发给对方
@@ -168,7 +172,17 @@ onMounted(async () => {
     keyPair = genkeyPair;
 
     gameStore.subscribeTopic("online_user", (data: TopicPayload<{ onlineUsers: string[] }>) => {
+        let prevOnlineUsers = onlineUsers.value;
         onlineUsers.value = data.payload.onlineUsers;
+
+        // 去掉下线的好友
+        prevOnlineUsers.forEach(user => {
+            if (!onlineUsers.value.includes(user)) {
+                sharedKeyMap.value.delete(user);
+                friendRequests.value = filterFriendRequests(friendRequests.value.filter(request => request.id !== user));
+            }
+        });
+
     });
     gameStore.subscribeTopic("message", async (data: TopicPayload<{ id: number; message: string, from: string, to: string }>) => {
 

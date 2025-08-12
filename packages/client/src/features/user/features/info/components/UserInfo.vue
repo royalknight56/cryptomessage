@@ -60,6 +60,9 @@ const handleLogout = () => {
     z-index: auto;
     width: 100%;
     max-width: 500px;
+    /* margin: 0 auto; */
+    margin-top: 20px;
+    margin-left: 20px;
 }
 
 .user-info-name {

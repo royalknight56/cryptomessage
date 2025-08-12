@@ -100,7 +100,7 @@ const handleSubmit = async () => {
     emits('login-success');
   } else {
     console.log(result);
-    errors.value = [result.message];
+    errors.value = result.errors || [result.message];
   }
 };
 </script>

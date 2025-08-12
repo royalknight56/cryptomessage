@@ -38,7 +38,7 @@
       </div>
 
       <!-- 错误信息 -->
-      <div v-if="errors.length > 0" class="error-messages">
+      <div v-if="errors?.length > 0" class="error-messages">
         <div v-for="error in errors" :key="error" class="error-item">
           {{ error }}
         </div>
@@ -154,7 +154,7 @@ const handleSubmit = async () => {
     // 触发注册成功事件
     emits('register-success', form.username);
   } else {
-    errors.value = result.errors;
+    errors.value = result.errors || [result.message];
   }
 };
 
