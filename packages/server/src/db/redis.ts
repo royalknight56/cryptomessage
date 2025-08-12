@@ -93,11 +93,15 @@ class RedisManager {
   }
 
   async addOnlineUser(userId: string) {
-    await this.client.sAdd("online_users", userId);
+    if (userId) {
+      await this.client.sAdd("online_users", userId);
+    }
   }
 
   async removeOnlineUser(userId: string) {
-    await this.client.sRem("online_users", userId);
+    if (userId) {
+      await this.client.sRem("online_users", userId);
+    }
   }
 
   async getOnlineUsers(): Promise<string[]> {

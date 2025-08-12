@@ -14,6 +14,15 @@ onMounted(async () => {
     })
   }
 });
+
+// const unregister = async () => {
+//   await fetch("http://localhost:3001/api/auth/unregister", {
+//     method: "POST",
+//     body: JSON.stringify({
+//       userId: "123",
+//     }),
+//   });
+// };
 </script>
 
 <template>

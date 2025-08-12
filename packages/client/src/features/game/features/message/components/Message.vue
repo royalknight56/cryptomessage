@@ -128,7 +128,7 @@ const filterMessages = (messages: { id: number; from: string; to: string; messag
     return messages.filter(message => message.from === selectUser || message.to === selectUser);
 }
 const filterFriendRequests = (friendRequests: { id: string; type: string; publicKey: string }[]) => {
-    return friendRequests.filter(request => request.type === "other");
+    return friendRequests.filter(request => !sharedKeyMap.value.has(request.id));
 }
 const filterFriends = (friends: string[]) => {
     return friends.filter(friend => onlineUsers.value.includes(friend));

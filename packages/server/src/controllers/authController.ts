@@ -34,7 +34,7 @@ export class AuthController {
 
   async unregister(req: Request, res: Response): Promise<void> {
     try {
-      const result = await authService.unregister(req.body.userId);
+      const result = await authService.unregister(req.body?.userId || "");
       const statusCode = result ? 200 : 400;
       res.status(statusCode).json(result);
     } catch (error) {
