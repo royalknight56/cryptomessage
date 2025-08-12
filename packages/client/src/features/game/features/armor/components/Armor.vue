@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { useGameStore } from "@/stores";
 import BagItemDisplay from "@/features/game/features/bag/components/BagItemDisplay.vue";
-import type { TopicPayload, UserArmor, UserBag } from "@idleworld/types";
+import type { TopicPayload, UserArmor } from "@idleworld/types";
 import { computed, onMounted, onUnmounted, ref } from "vue";
 const armor = ref<UserArmor>({
     weapon: "",

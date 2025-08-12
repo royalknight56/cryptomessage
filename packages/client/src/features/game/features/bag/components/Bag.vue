@@ -1,6 +1,6 @@
 <template>
     <div class="bag">
-        <div v-for="(item, index) in new Array(bag.maxCapacity)" class="bag-item-container"
+        <div v-for="(,index) in new Array(bag.maxCapacity)" class="bag-item-container"
             :key="(bag.items[index]?.id ?? '') + bag.items[index]?.createdAt + index" @click="selectItem(index)"
             @dragstart="dragStart(index)" @dragover.prevent @drop="drop(index)"
             @contextmenu.prevent="(e) => showContextMenu(e, index)" :draggable="!!bag.items[index]">
@@ -19,12 +19,9 @@
 </template>
 <script setup lang="ts">
 import { useGameStore } from "@/stores";
-import type {
-    TopicPayload,
-    UserBag,
-} from "@idleworld/types";
+import type { UserBag } from "@idleworld/types";
 import BagItem from "./BagItemDisplay.vue";
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref } from "vue";
 
 const gameStore = useGameStore();
 const bag = computed(() => gameStore.bag ?? {

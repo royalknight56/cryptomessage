@@ -3,7 +3,7 @@ import { onMounted } from 'vue';
 import { useAuth } from './composables/useAuth';
 import { useRouter } from 'vue-router';
 
-const { currentUser, getCurrentUser } = useAuth();
+const { getCurrentUser } = useAuth();
 const router = useRouter()
 onMounted(async () => {
   const user = await getCurrentUser();

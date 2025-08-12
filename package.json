@@ -10,6 +10,8 @@
     "dev": "concurrently \"npm run server dev\" \"npm run client dev\"",
     "install:all": "pnpm install && pnpm -C packages/server install && pnpm -C packages/client install",
     "build:types": "pnpm -C packages/types build",
+    "build:server": "pnpm -C packages/server build",
+    "build:client": "pnpm -C packages/client build",
     "dev:types": "pnpm -C packages/types dev",
     "migrate:types": "node scripts/migrate-types.js",
     "lint": "eslint . --ext .js,.ts,.vue",

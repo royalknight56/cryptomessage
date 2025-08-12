@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import type { BagItem } from "@idleworld/types";
 
-const props = defineProps<{
+defineProps<{
     item?: BagItem | null;
 }>();
 </script>
