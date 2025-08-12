@@ -217,7 +217,7 @@ const resetSettings = () => {
 .home-container {
     height: 100vh;
     display: flex;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #cacaca 0%, #fffeff 100%);
     overflow: hidden;
     gap: 0;
 }

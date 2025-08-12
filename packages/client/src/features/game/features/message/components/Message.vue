@@ -61,7 +61,7 @@
             <!-- 消息区域 -->
             <div class="messages-area">
                 <div v-if="!selectUser" class="no-chat-selected">
-                    <div class="welcome-text">欢迎使用加密消息系统</div>
+                    <div class="welcome-text">欢迎使用消息系统</div>
                     <div class="welcome-desc">选择左侧好友开始安全聊天</div>
                 </div>
                 <div v-else class="messages-list">
