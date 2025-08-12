@@ -77,12 +77,6 @@ const handleLoginSuccess = () => {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.auth-card:hover {
-    transform: translateY(-5px);
-    box-shadow:
-        0 30px 80px rgba(0, 0, 0, 0.15),
-        0 12px 50px rgba(0, 0, 0, 0.08);
-}
 
 .auth-header {
     text-align: center;
