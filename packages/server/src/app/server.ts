@@ -2,6 +2,7 @@ import { Server as SocketIOServer } from "socket.io";
 import { Server as HttpServer } from "http";
 import { redisManager } from "../db/redis";
 import { handleSocketConnection } from "./socket";
+import { logger } from "../utils/logger";
 
 const PORT = process.env.PORT || 3001;
 
@@ -18,7 +19,7 @@ export class ServerService {
     try {
       // 连接Redis
       await redisManager.connect();
-      console.log("Redis连接成功");
+      logger.info("Redis连接成功");
 
       // 执行数据迁移
       // console.log("开始执行数据迁移...");
@@ -29,7 +30,7 @@ export class ServerService {
       });
       // 启动HTTP服务器
       this.server.listen(PORT, () => {
-        console.log(`服务器运行在端口 ${PORT}`);
+        logger.info(`服务器运行在端口 ${PORT}`);
       });
 
       // 设置优雅关闭
