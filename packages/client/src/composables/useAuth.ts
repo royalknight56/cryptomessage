@@ -6,7 +6,7 @@ import type {
   AuthResponse,
 } from "@idleworld/types";
 
-const API_BASE_URL = "http://localhost:3001/api";
+const API_BASE_URL = import.meta.env.VITE_APP_API_BASE_URL;
 
 // 全局认证状态
 const currentUser = ref<User | null>(null);

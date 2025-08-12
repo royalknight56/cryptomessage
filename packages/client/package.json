@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "dev": "vite --mode qa",
+    "build": "vue-tsc -b && vite build --mode online",
     "preview": "vite preview",
     "setup-pinia": "echo '🚀 设置 Pinia 状态管理...' && npm install pinia && echo '✅ Pinia 安装完成！请查看 src/stores/README.md 了解如何启用'"
   },

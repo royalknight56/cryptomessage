@@ -31,7 +31,7 @@ export const useGameStore = defineStore("game", {
     },
     joinGame(callback: () => void) {
       // 核心游戏状态
-      const socket = io("ws://localhost:3001", {
+      const socket = io(import.meta.env.VITE_APP_WS_BASE_URL, {
         withCredentials: true,
         transports: ["websocket"],
       });
