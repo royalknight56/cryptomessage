@@ -146,7 +146,8 @@ import Message from '@/features/game/features/message/components/Message.vue';
 import { useGameStore } from "@/stores";
 import { LoginApi } from "@/features/user/features/login/api/login-api";
 import { useRouter } from "vue-router";
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import type { TopicPayload, User, UserBag } from '@idleworld/types';
 
 // 游戏状态
 const gameStore = useGameStore();
@@ -163,6 +164,21 @@ const autoSaveChat = ref(true);
 
 // 用户信息
 const player = computed(() => gameStore.player);
+
+
+onMounted(() => {
+    gameStore.joinGame(async () => {
+        const ret = await gameStore.wsAction<{ user: User }>("join_game", "test");
+        if (ret.user) {
+            gameStore.player = ret.user;
+        }
+    });
+    gameStore.subscribeTopic("system_message", (data: TopicPayload<{ message: string; user: User }>) => {
+        console.log("system_message", data);
+    });
+});
+
+
 
 // 方法
 const toggleUserInfo = () => {

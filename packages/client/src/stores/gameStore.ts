@@ -30,6 +30,7 @@ export const useGameStore = defineStore("game", {
       return promise;
     },
     joinGame(callback: () => void) {
+      console.log(import.meta.env.VITE_APP_WS_BASE_URL);
       // 核心游戏状态
       const socket = io(import.meta.env.VITE_APP_WS_BASE_URL, {
         withCredentials: true,
