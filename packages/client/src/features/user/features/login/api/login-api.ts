@@ -35,12 +35,14 @@ export class LoginApi {
       .post<{
         success: boolean;
         message: string;
+        errors: string[];
       }>("/auth/register", formData)
       .then((res) => res.data)
       .catch((err) => {
         return {
           success: false,
           message: err.response.data.message,
+          errors: err.response.data.errors,
         };
       });
   }

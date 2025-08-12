@@ -18,7 +18,7 @@
             <div class="online-users-section">
                 <div class="section-header">在线用户</div>
                 <div class="online-users-list">
-                    <div v-for="user in users" :key="user">
+                    <div v-for="user in onlineUsers" :key="user">
                         <div v-if="user !== (player?.userId || '')" class="online-user-item"
                             @click="handleAddUser(user)">
                             <div class="user-avatar">{{ user.charAt(0).toUpperCase() }}</div>
@@ -33,7 +33,8 @@
             <div class="friend-requests-section" v-if="friendRequests.length > 0">
                 <div class="section-header">好友请求</div>
                 <div class="friend-requests-list">
-                    <div v-for="request in friendRequests" :key="request.id" class="friend-request-item">
+                    <div v-for="request in filterFriendRequests(friendRequests)" :key="request.id"
+                        class="friend-request-item">
                         <div class="user-avatar">{{ request.id.charAt(0).toUpperCase() }}</div>
                         <div class="request-info">
                             <div class="request-name">{{ request.id }}</div>
@@ -65,7 +66,8 @@
                     <div class="welcome-desc">选择左侧好友开始安全聊天</div>
                 </div>
                 <div v-else class="messages-list">
-                    <div v-for="message in messages" :key="message.id" class="message-bubble">
+                    <div v-for="message in filterMessages(messages, selectUser)" :key="message.id"
+                        class="message-bubble" :class="{ 'self-message': message.from === player?.userId }">
                         <div class="message-content">{{ message.message }}</div>
                         <div class="message-time">{{ new Date().toLocaleTimeString() }}</div>
                     </div>
@@ -93,11 +95,11 @@ import { arrayBufferToBase64, base64ToArrayBuffer, decryptWithMyPrivate, encrypt
 
 const gameStore = useGameStore();
 
-const messages = ref<{ id: number; message: string }[]>([]);
+const messages = ref<{ id: number; from: string; to: string; message: string }[]>([]);
 const message = ref("");
 
 const selectUser = ref<string>("");
-const users = ref<string[]>([]);
+const onlineUsers = ref<string[]>([]);
 const player = computed(() => gameStore.player);
 
 const friendRequests = ref<{
@@ -117,10 +119,20 @@ const sendMessage = async () => {
     if (publicKey) {
         const encryptedMessage = await encryptWithPeer(publicKey, message.value);
         gameStore.wsAction("action_message_send_to_user", { message: encryptedMessage, to: selectUser.value });
+        messages.value.push({ id: 0, from: player.value?.userId || "", to: selectUser.value, message: message.value });
         message.value = ""; // 清空输入框
     }
 };
 
+const filterMessages = (messages: { id: number; from: string; to: string; message: string }[], selectUser: string) => {
+    return messages.filter(message => message.from === selectUser || message.to === selectUser);
+}
+const filterFriendRequests = (friendRequests: { id: string; type: string; publicKey: string }[]) => {
+    return friendRequests.filter(request => request.type === "other");
+}
+const filterFriends = (friends: string[]) => {
+    return friends.filter(friend => onlineUsers.value.includes(friend));
+}
 
 const startAddUser = async (uid: string) => {
     friendRequests.value.push({ id: uid, type: "self", publicKey: "" });
@@ -145,7 +157,7 @@ const handleSelectUser = (uid: string) => {
 }
 
 const handleAcceptFriendRequest = async (request: { id: string; publicKey: string }) => {
-    friendRequests.value = friendRequests.value.filter(request => request.id !== request.id);
+    friendRequests.value = friendRequests.value.filter(r => r.id !== request.id);
     sharedKeyMap.value.set(request.id, await importPublicKey(base64ToArrayBuffer(request.publicKey)));
     startAddUser(request.id);
 }
@@ -156,11 +168,11 @@ onMounted(async () => {
     keyPair = genkeyPair;
 
     gameStore.subscribeTopic("online_user", (data: TopicPayload<{ onlineUsers: string[] }>) => {
-        users.value = data.payload.onlineUsers;
+        onlineUsers.value = data.payload.onlineUsers;
     });
-    gameStore.subscribeTopic("message", async (data: TopicPayload<{ id: number; message: string, from: string }>) => {
+    gameStore.subscribeTopic("message", async (data: TopicPayload<{ id: number; message: string, from: string, to: string }>) => {
 
-        messages.value.push({ id: data.payload.id, message: await decryptWithMyPrivate(keyPair.privateKey as CryptoKey, data.payload.message) });
+        messages.value.push({ id: data.payload.id, from: data.payload.from, to: data.payload.to, message: await decryptWithMyPrivate(keyPair.privateKey as CryptoKey, data.payload.message) });
     });
     gameStore.subscribeTopic("add_user", (data: TopicPayload<{ uid: string }>) => {
         startAddUser(data.payload.uid);
@@ -170,7 +182,7 @@ onMounted(async () => {
             return;
         }
         const hasRequest = friendRequests.value.find(request => request.id === data.payload.from);
-        console.log(hasRequest);
+
         if (hasRequest && hasRequest.type === "self") {
             handleAcceptFriendRequest({ id: data.payload.from, publicKey: data.payload.publicKey });
             return;
@@ -389,12 +401,16 @@ onUnmounted(() => {
 
 .message-bubble {
     max-width: 70%;
-    align-self: flex-end;
+    align-self: flex-start;
     background: #007acc;
     color: white;
     padding: 12px 16px;
     border-radius: 18px 18px 4px 18px;
     position: relative;
+}
+
+.self-message {
+    align-self: flex-end;
 }
 
 .message-content {

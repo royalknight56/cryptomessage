@@ -38,11 +38,11 @@
       </div>
 
       <!-- 错误信息 -->
-      <!-- <div v-if="errors.length > 0" class="error-messages">
+      <div v-if="errors.length > 0" class="error-messages">
         <div v-for="error in errors" :key="error" class="error-item">
           {{ error }}
         </div>
-      </div> -->
+      </div>
 
       <!-- 提交按钮 -->
       <button type="submit" :disabled="isLoading || !isFormValid" class="submit-btn">
@@ -80,6 +80,8 @@ const form = reactive({
   password: '',
   confirmPassword: ''
 });
+
+const errors = ref<string[]>([]);
 
 // 字段错误
 const fieldErrors = ref<Record<string, string>>({});
@@ -151,6 +153,8 @@ const handleSubmit = async () => {
   if (result.success) {
     // 触发注册成功事件
     emits('register-success', form.username);
+  } else {
+    errors.value = result.errors;
   }
 };
 
